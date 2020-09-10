@@ -12,4 +12,4 @@ docker build -t sysmon .
 ### Usage:
 - After build the docker image run with
 ``docker run -p 6969:6969 -d sysmon``
-- Open a browser and navigate to the ``serverip:6969``
+- Open a browser and navigate to the ``serverip:6969/primary``
