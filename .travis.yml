@@ -1,0 +1,47 @@
+sudo: required
+addons:
+  apt:
+    update: true
+    packages:
+      - docker-ce
+services:
+  - docker
+script:
+  - export DOCKER_CLI_EXPERIMENTAL=enabled
+  - source sha_function.sh
+  - alpine_arm_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm")
+  - echo $alpine_arm_sha
+  - alpine_arm64_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm64")
+  - echo $alpine_arm64_sha
+  - sysmon_arm_sha=$(get_manifest_sha "treehouses/sysmon:latest" "arm")
+  - echo $sysmon_arm_sha
+  - sysmon_arm64_sha=$(get_manifest_sha "treehouses/sysmon" "arm64")
+  - echo $sysmon_arm64_sha
+  - flag_arm=$(is_base "treehouses/alpine@"$alpine_arm_sha "treehouses/sysmon@"$sysmon_arm_sha )
+  - echo $flag_arm
+  - flag_arm64=$(is_base "treehouses/alpine@"$alpine_arm64_sha "treehouses/sysmon@"$sysmon_arm64_sha )
+  - echo $flag_arm64
+  - echo $DOCKERAPIKEY | docker login -u "sevenseas" --password-stdin
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - "./docker-build.sh treehouses/alpine:latest arm arm64"
+  - flag=$(compare "treehouses/alpine@"$alpine_arm_sha "treehouses/sysmon@"$sysmon_arm_sha "treehouses/alpine@"$alpine_arm64_sha "treehouses/sysmon@"$sysmon_arm64_sha)
+  - echo $flag
+before_deploy:
+  - "./deploy.sh arm"
+  - "./deploy.sh arm64"
+  - tag_time=$(date +%Y%m%d%H%M)
+  - echo $tag_time
+  - tag_latest="latest"
+  - create_manifest treehouses/sysmon $tag_latest $tag_time treehouses/sysmon-tags:arm treehouses/sysmon-tags:arm64
+  - docker manifest inspect treehouses/sysmon:$tag_latest
+  - docker manifest inspect treehouses/sysmon:$tag_time
+deploy:
+  - provider: script
+    script: docker manifest push treehouses/sysmon:$tag_latest; docker manifest push treehouses/sysmon:$tag_time
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: "$flag = true"
+env:
+  global:
+    secure: "CpjzK46wrHgHaQr8KbAM8Yua5j/dtSFT58whyjPwFV4+iJfIJqUFSAf2ioLsvSwH/RLGUyIPCaWs2dp7zKO8mjsYit+NCWKrGzx6nw1bbs+z61wnD3VEFW4LVPJ1fC7wYkEITL404UTVR4cFiyJVaOkbp8LZrESduYZ91dyxbR6wUh/FBWtxr/ST5aB3hOovQdBSaunl+fFVRDbUR8XvRE5dTJOZKLRlBnGrMYVnaKYUL/3Sqvv4eLI5MtmMo4ClTMEX5CjaQwc/9C0x+hMbqhYL+uz5iG9I1zJkh5W3fzxmmhTsBvgCtfVHhFBWtfzaLXEbyCUljCxXbf6rSSbenGwFz/UqiviSHG/YcTXCUBT/Nw9Iy/1a7MmI/7HNzjSlkuab9hR4Iiy2D87z5FLD9x4FdaLpZ1CEG3iFMPiiPggTrJfH/bkO7R4XiJMJTrnyrPOAo+e9raE8ggr2pZdT38beasG2wQZ52z+1ESecbj2YfTSxe0cDeFBDbY07aB0/nzrBw9JWp0wwdsrwp75M43cJ71b52Zedni6MbgQ6TihWefN+86xMi4vFhNoz/HWm5DgZzSxCIkwO3JRg/pFpksnm4ucGk6wIO27UzGdA5Yoi6aOaWgJ3yXcTS6vm/HwA3hHBCCgi8AeNVzTIriJoiC9wxmUC9ZsB+jqVG6keSsM="
