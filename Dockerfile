@@ -9,4 +9,4 @@ RUN apk update && apk add --no-cache git gcc musl-dev python3-dev py3-virtualenv
 
 EXPOSE $PORT
 
-CMD virtualenv venv; source venv/bin/activate; pip3 install -r $SYSMON_HOME/requirements.txt; python3 $SYSMON_HOME/main.py -p $PORT -6
+CMD pip3 install -r $SYSMON_HOME/requirements.txt; python3 $SYSMON_HOME/main.py -p $PORT -6
