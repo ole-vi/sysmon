@@ -17,8 +17,8 @@ jobs:
       - name: treehouses sysmon
         run: |
           export DOCKER_CLI_EXPERIMENTAL=enabled
-          #repo="jleekwong/sysmon"
-          #base="alpine"
+          repo="jleekwong/sysmon"
+          base="alpine"
           #source .github/workflows/utils.sh
           #sys_arm_sha=$(get_manifest_sha "$repo:latest" "arm")
           #echo $sys_arm_sha
