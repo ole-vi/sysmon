@@ -23,14 +23,14 @@ jobs:
           sys_arm_sha=$(get_manifest_sha "$repo:latest" "arm")
           echo $sys_arm_sha
           alpine_arm_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm")
-          #echo $alpine_arm_sha
-          #flag_arm=$(is_base "treehouses/alpine@"$alpine_arm_sha "$repo@"$sys_arm_sha)
-          #echo $flag_arm
-          #sys_amd64_sha=$(get_manifest_sha "$repo:latest" "amd64")
-          #echo $sys_amd64_sha
-          #alpine_amd64_sha=$(get_manifest_sha "treehouses/alpine:latest" "amd64")
-          #echo $alpine_amd64_sha
-          #flag_amd64=$(is_base "treehouses/alpine@"$alpine_amd64_sha "$repo@"$sys_amd64_sha)
+          echo $alpine_arm_sha
+          flag_arm=$(is_base "treehouses/alpine@"$alpine_arm_sha "$repo@"$sys_arm_sha)
+          echo $flag_arm
+          sys_amd64_sha=$(get_manifest_sha "$repo:latest" "amd64")
+          echo $sys_amd64_sha
+          alpine_amd64_sha=$(get_manifest_sha "treehouses/alpine:latest" "amd64")
+          echo $alpine_amd64_sha
+          flag_amd64=$(is_base "treehouses/alpine@"$alpine_amd64_sha "$repo@"$sys_amd64_sha)
           #echo $flag_amd64
           #sys_arm64_sha=$(get_manifest_sha "$repo:latest" "arm64")
           #echo $sys_arm64_sha
