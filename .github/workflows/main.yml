@@ -31,21 +31,21 @@ jobs:
           alpine_amd64_sha=$(get_manifest_sha "treehouses/alpine:latest" "amd64")
           echo $alpine_amd64_sha
           flag_amd64=$(is_base "treehouses/alpine@"$alpine_amd64_sha "$repo@"$sys_amd64_sha)
-          #echo $flag_amd64
-          #sys_arm64_sha=$(get_manifest_sha "$repo:latest" "arm64")
-          #echo $sys_arm64_sha
-          #alpine_arm64_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm64")
-          #echo $alpine_arm64_sha
-          #flag_arm64=$(is_base "treehouses/alpine@"$alpine_arm64_sha "$repo@"$sys_arm64_sha)
-          #echo $flag_arm64
-          #flag=$(compare "treehouses/alpine@"$alpine_arm_sha "$repo@"$sys_arm_sha "treehouses/alpine@"$alpine_amd64_sha "$repo@"$sys_amd64_sha "treehouses/alpine@"$alpine_arm64_sha "$repo@"$sys_arm64_sha)
-          #echo $flag
-          #if [[ $flag == true ]]; then
-            #docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-            #build_image "treehouses/alpine:latest" arm "$repo" #base image is arm arch
-            #build_image "treehouses/alpine:latest" amd64 "$repo" #base image is amd64 arch
-            #build_image "treehouses/alpine:latest" arm64 "$repo" #base image is arm64 arch
-            #deploy_image "$repo" arm
+          echo $flag_amd64
+          sys_arm64_sha=$(get_manifest_sha "$repo:latest" "arm64")
+          echo $sys_arm64_sha
+          alpine_arm64_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm64")
+          echo $alpine_arm64_sha
+          flag_arm64=$(is_base "treehouses/alpine@"$alpine_arm64_sha "$repo@"$sys_arm64_sha)
+          echo $flag_arm64
+          flag=$(compare "treehouses/alpine@"$alpine_arm_sha "$repo@"$sys_arm_sha "treehouses/alpine@"$alpine_amd64_sha "$repo@"$sys_amd64_sha "treehouses/alpine@"$alpine_arm64_sha "$repo@"$sys_arm64_sha)
+          echo $flag
+          if [[ $flag == true ]]; then
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            build_image "treehouses/alpine:latest" arm "$repo" #base image is arm arch
+            build_image "treehouses/alpine:latest" amd64 "$repo" #base image is amd64 arch
+            build_image "treehouses/alpine:latest" arm64 "$repo" #base image is arm64 arch
+            deploy_image "$repo" arm
             #deploy_image "$repo" amd64
             #deploy_image "$repo" arm64
             #tag=$(date +%Y%m%d%H%M)
@@ -57,4 +57,4 @@ jobs:
             #docker manifest push $repo:$tag; docker manifest push $repo:$tag2
           #else
             #echo "no changes"
-          #fi
+          fi
