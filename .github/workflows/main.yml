@@ -19,10 +19,10 @@ jobs:
           export DOCKER_CLI_EXPERIMENTAL=enabled
           repo="jleekwong/sysmon"
           base="alpine"
-          #source .github/workflows/utils.sh
-          #sys_arm_sha=$(get_manifest_sha "$repo:latest" "arm")
-          #echo $sys_arm_sha
-          #alpine_arm_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm")
+          source .github/workflows/utils.sh
+          sys_arm_sha=$(get_manifest_sha "$repo:latest" "arm")
+          echo $sys_arm_sha
+          alpine_arm_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm")
           #echo $alpine_arm_sha
           #flag_arm=$(is_base "treehouses/alpine@"$alpine_arm_sha "$repo@"$sys_arm_sha)
           #echo $flag_arm
